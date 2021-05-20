@@ -123,36 +123,48 @@ regard_au_centre()
 ################APPLICATION###############
 ##########################################
 
+#Capture video de la camera
 vc = cv2.VideoCapture(0) 
 
+#Création de "l'instance" flask appelée "app" = le site web
 app = Flask(__name__)
 
+#Method 'GET' -> accès via le lien dans un moteur de recherche, la fonction s'active lorsque quelqu'un va sur la page <ipadress>:5000 
 @app.route('/',methods = ['GET'])
 def show_indexhtml():
+    #Appelle le fichier index.html qui contient le code html de la page de base
     return render_template('index.html')
 
+#Method 'POST' -> accès via les boutons sur le site, pas par un lien direct, <ipadress>:5000/retour 
+#Utile pour retourner au menu de base depuis les autres menus
 @app.route('/retour',methods = ['POST'])
 def retour_indexhtml():
+    #Appelle le fichier index.html qui contient le code html de la page de base
     return render_template('index.html')
 
+#Method 'POST' -> accès via les boutons sur le site, pas par un lien direct, <ipadress>:5000/retour_reset
+#Meme fonction qu'au dessus, mais avec en plus l'appel de la fonction regard au centre pour réinitialiser le regard de Bilbot
 @app.route('/retour_reset',methods = ['POST'])
 def retour_reset_indexhtml():
     regard_au_centre()
     return render_template('index.html')
 
+#Generation du retour camera
 def gen(): 
    while True: 
        rval, frame = vc.read() 
        cv2.imwrite('pic.jpg', frame) 
        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('pic.jpg', 'rb').read() + b'\r\n')
-       
+
+#Accès au retour camera
 @app.route('/video_feed') 
 def video_feed(): 
    return Response(gen(),mimetype='multipart/x-mixed-replace; boundary=frame') 
 
+#Fonction appelée quand l'utilisateur change la valeur sur le slider du déplacement des yeux
 @app.route("/horizontal", methods=["POST"])
 def horizontal():
-    # Get slider Values
+    #Optention de la valeur du slider
     slider = request.form["slider"]
     angle_x = int(slider)
             
@@ -161,9 +173,12 @@ def horizontal():
     time.sleep(0.1)
     #Eteignage des servos des yeux (limitation des tremblements)
     servo_x_oeil.ChangeDutyCycle(0)
+    #Retour à la page principale
     return render_template('index.html')
 
+#Fonction appelée quand l'utiliateur appui sur le bouton de la led de l'oeil
 @app.route('/led_oeil', methods = ['POST'])
+#Allumage / shutdown de la led en fonction de son état actuel
 def allumage_led_oeil():
         global etat_led_oeil
         global affichage_led_oeil
@@ -173,9 +188,12 @@ def allumage_led_oeil():
         else:
             etat_led_oeil = False
             GPIO.output(led_broche, GPIO.LOW)
+	#Retour à la page principale
         return render_template('index.html')
-    
+
+#Fonction appelée quand l'utiliateur appui sur le bouton de la led de l'oeil
 @app.route('/led_socle', methods = ['POST'])
+#Allumage / shutdown de la led en fonction de son état actuel
 def allumage_led_socle():
         global etat_led_socle
         global affichage_led_socle
@@ -185,14 +203,17 @@ def allumage_led_socle():
         else:
             etat_led_socle = False
             GPIO.output(led_socle, GPIO.LOW)
+	#Retour à la page principale
         return render_template('index.html')
 
+#Fonction appelée quand l'utiliateur rentre un message dans la textbox
 @app.route('/message', methods = ['POST'])
 def lire_message():
+	#Recuperation du message
         message = request.form['message']
-        
+        #Coupage du message mot par mot
         message_coupe = message.split(' ')
-            
+        #Lecture du message avec mouvement de bouches
         for i in message_coupe:
             #ouverture de la bouche
             servo_bouche.ChangeDutyCycle(angle_to_percent(bouche_ouverte))
@@ -202,10 +223,13 @@ def lire_message():
             time.sleep(0.05)
             
         servo_bouche.ChangeDutyCycle(0)
-        
+        #Retour à la page principale
         return render_template('index.html')
 
+#Page qui apparait quand l'utilisateur clique sur le bouton mode traduction
+#Dans cette page l'utilisateur rentre tous les paramètres de la traduction
 @app.route('/traduction', methods = ['POST'])
+#Code HTML de la page
 def traducteur_index():
     print('mode traducteur active')
     return '''
@@ -266,9 +290,10 @@ def traducteur_index():
 </html>
 '''
 
+#Quand l'utilisateur clique sur le bouton pour lancer la traduction
 @app.route('/dire_traduction', methods = ['POST'])
 def dire_traduction():
-    
+    #Recuperation de tous les paramètres
     langue_entree=request.form['langue_entree_select']
     langue_sortie=request.form['langue_sortie_select']
     vitesse=request.form['vitesse_select']
@@ -297,6 +322,7 @@ def dire_traduction():
     servo_bouche.ChangeDutyCycle(0)
     return traducteur_index()
 
+#Menu permettant de choisir entre les differents modes de traitement d'image pour rediriger sur les bonnes pages
 def mod_camera_index():
     print('mode cameras active')
     return '''
@@ -333,10 +359,12 @@ def mod_camera_index():
 </html>
 '''
 
+#Retour au menu de selection du mode de traitement d'image
 @app.route('/mod_camera', methods = ['POST'])
 def acceder_mod_camera():
     return mod_camera_index()
 
+#Menu de selection du masque du suiveur
 def suiveur_index():
     print('mode suiveur active')
     return '''
@@ -402,10 +430,12 @@ def suiveur_index():
 </html>
 '''
 
+#Retour au menu de selection du masque
 @app.route('/suiveur', methods = ['POST'])
 def acceder_suiveur():
     return suiveur_index()
 
+#Generation du retour camera du masque
 def gen_mask():
    print('generation_mask')
    while True: 
@@ -417,12 +447,14 @@ def gen_mask():
        
        cv2.imwrite('pic_mask.jpg', mask) 
        yield (b'--mask\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('pic_mask.jpg', 'rb').read() + b'\r\n')
-       
+
+#Acces au retour camera du masque
 @app.route('/mask_feed') 
 def mask_feed():
    print('retour video')
    return Response(gen_mask(),mimetype='multipart/x-mixed-replace; boundary=mask')
 
+#Actualiser le masque affiché en fonction des curseurs
 @app.route('/actualiser_hsv', methods = ['POST'])
 def actualiser_hsv():
         global lower
@@ -441,6 +473,7 @@ def actualiser_hsv():
         
         return suiveur_index()
 
+#Changement du masque en fonction des boutons de couleurs predefinies
 @app.route('/couleur_predefinie', methods = ['POST'])
 def selection_couleur_predefinies():
     global lower
@@ -461,6 +494,7 @@ def selection_couleur_predefinies():
 
     return suiveur_index()
 
+#Lancement du suiveur de couleur, affichage a l'ecran du retour camera avec les objets de la couleur détourés
 @app.route('/suiveur_color_go', methods = ['POST'])
 def suiveur_color():
     print('mode suiveur active')
@@ -485,6 +519,7 @@ def suiveur_color():
 </html>
 '''
 
+#Generation du retour camera avec les contours de la bonne couleur détourés
 def gen_color():
    print('generation_color')
    
@@ -565,12 +600,14 @@ def gen_color():
                  
         cv2.imwrite('pic_color.jpg', resized) 
         yield (b'--color\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('pic_color.jpg', 'rb').read() + b'\r\n')
-       
+
+#Acces au retour camera avec les contours de la bonne couleur détourés
 @app.route('/color_feed') 
 def color_feed():
    print('retour video color')
    return Response(gen_color(),mimetype='multipart/x-mixed-replace; boundary=color')
 
+#Interface de lecture de QR code avec retour camera
 @app.route('/lecture_qr_code', methods = ['POST'])
 def acceder_qr_code():
     return '''
@@ -582,7 +619,7 @@ def acceder_qr_code():
 
   <body>
     
-    <center><h1><FONT face="Verdana" color="white">DIFFERENTS MODES DISPONIBLES</FONT></h1>
+    <center><h1><FONT face="Verdana" color="white">BILBOT LE LECTEUR DE QR CODE</FONT></h1>
     <FONT face="Verdana" color="#7D7DFF">
 	
 	<p><img src="/qr_feed"></p>
@@ -595,6 +632,7 @@ def acceder_qr_code():
 </html>
 '''
 
+#Generation et analyse du retour camera detectant les QR codes
 def gen_qr():
    print('generation_qr')
    
@@ -639,12 +677,14 @@ def gen_qr():
        
        cv2.imwrite('pic_qr.jpg', frame) 
        yield (b'--qr\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('pic_qr.jpg', 'rb').read() + b'\r\n')
-       
+ 
+#Accès au retur camera de detection de QR code
 @app.route('/qr_feed')  
 def qr_feed():
    print('retour video qr')
    return Response(gen_qr(),mimetype='multipart/x-mixed-replace; boundary=qr')
 
+#Interface du compteur de personnes
 @app.route('/compteur_personnes', methods = ['POST'])
 def acceder_compteur_personnes():
     return '''
@@ -669,6 +709,7 @@ def acceder_compteur_personnes():
 </html>
 '''
 
+#Generation et analyse du retour caméra detectant les visages avec une IA
 def gen_compteur_personnes():
    print('generation_compteur_personnes')
    
@@ -712,11 +753,14 @@ def gen_compteur_personnes():
        
        cv2.imwrite('pic_compteur_personnes.jpg', frame) 
        yield (b'--compteur_personnes\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('pic_compteur_personnes.jpg', 'rb').read() + b'\r\n')
-       
+    
+#Acces au retour camera
 @app.route('/compteur_personnes_feed')  
 def compteur_personnes_feed():
    print('retour video compteur')
    return Response(gen_compteur_personnes(),mimetype='multipart/x-mixed-replace; boundary=compteur_personnes')
 
 if __name__ == '__main__':
+    #A changer en fonction de votre adresse IP
+    #ifconfig dans le terminal de la raspberry, changer "172.16.5.114" par votre adresse
     app.run(host="172.16.5.114", port=5000)
