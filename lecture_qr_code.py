@@ -3,7 +3,6 @@ import RPi.GPIO as GPIO
 import cv2
 import numpy as np
 import pyzbar.pyzbar as pyzbar
-from espeak import espeak
 import time
 import os
 

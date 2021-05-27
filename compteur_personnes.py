@@ -2,7 +2,6 @@ import cv2
 import os
 import RPi.GPIO as GPIO
 import time
-from espeak import espeak
 
 #valeurs d'angle d'ouverture et de fermeture de la bouce
 ouverte = 20

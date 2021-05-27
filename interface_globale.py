@@ -1,6 +1,5 @@
 # coding=utf-8
 #Pour la voix
-from espeak import espeak
 from googletrans import Translator
 import urllib.request
 
@@ -254,7 +253,7 @@ def traduction_de_texte():
     #dimensiosn du menu
     surface = pygame.display.set_mode((1500, 800))
     #creation du menu
-    menu = pygame_menu.Menu(800, 1500, 'BILBOT LE TRADUCTEUR',theme=pygame_menu.themes.THEME_DARK)
+    menu = pygame_menu.Menu('BILBOT LE TRADUCTEUR', 1500, 800,theme=pygame_menu.themes.THEME_DARK)
 
     #ajout de tous les boutons, selecteurs et text input du menu
     menu.add.selector('Vitesse de parole : ', [('Rapide', 0), ('Lente', 1)], onchange=interface_choix_vitesse)
@@ -663,7 +662,7 @@ def choix_programme():
     #dimensiosn du menu
     surface = pygame.display.set_mode((1500, 800))
     #creation du menu
-    choix_programme = pygame_menu.Menu(800, 1500, 'BILBOT',theme=pygame_menu.themes.THEME_DARK)
+    choix_programme = pygame_menu.Menu('BILBOT', 1500, 800,theme=pygame_menu.themes.THEME_DARK)
     
     choix_programme.add.label('****************************')
     choix_programme.add.button('TRADUCTION DE TEXTE', traduction_de_texte)

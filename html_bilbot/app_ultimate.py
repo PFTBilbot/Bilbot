@@ -7,7 +7,6 @@ from flask import Flask, render_template, request, Response, render_template_str
 import os
 from picamera import PiCamera
 import RPi.GPIO as GPIO
-from espeak import espeak
 from googletrans import Translator
 import pyzbar.pyzbar as pyzbar
 
@@ -763,4 +762,4 @@ def compteur_personnes_feed():
 if __name__ == '__main__':
     #A changer en fonction de votre adresse IP
     #ifconfig dans le terminal de la raspberry, changer "172.16.5.114" par votre adresse
-    app.run(host="172.16.5.114", port=5000)
+    app.run(host="172.16.4.48", port=5000)

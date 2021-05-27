@@ -171,7 +171,7 @@ pygame.init()
 #dimensiosn du menu
 surface = pygame.display.set_mode((1500, 600))
 #creation du menu
-menu = pygame_menu.Menu(600, 1500, 'BILBOT LE TRADUCTEUR',theme=pygame_menu.themes.THEME_DARK)
+menu = pygame_menu.Menu('BILBOT LE TRADUCTEUR', 1500, 600,theme=pygame_menu.themes.THEME_DARK)
 
 #ajout de tous les boutons, selecteurs et text input du menu
 menu.add.selector('Vitesse de parole : ', [('Rapide', 0), ('Lente', 1)], onchange=interface_choix_vitesse)

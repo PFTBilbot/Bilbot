@@ -124,7 +124,7 @@ while True:
     
     #Si l'utilisateur appui sur echap le programme se coupe
     k = cv2.waitKey(5)
-     if k == 27:
+    if k == 27:
          break
         
 #Destruction des fenetres
