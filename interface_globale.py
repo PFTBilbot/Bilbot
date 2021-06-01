@@ -504,11 +504,10 @@ def suiveur_de_boite_raspberry():
          #Detection des contours
          cnts = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
          cnts = imutils.grab_contours(cnts)
-
+         
          for c in cnts:
              area = cv2.contourArea(c) #Aire des contours
              if area > 5000: #Application d'un filtre pour ne garder que les gros contours
-                 
                  #Afficahge des contours
                  cv2.drawContours(resized,[c],-1,(0,255,0), 3)
                  
@@ -521,8 +520,8 @@ def suiveur_de_boite_raspberry():
                  cv2.circle(resized,(cx,cy),7,(255,255,255),-1)
                  
                  #Determination de la direction dans laquelle faire tourner les servos pour suivre le contours
-                 if x > (largueur+precision)/2:
-                     #print('droite')
+                 if cx > (largueur+precision)/2:
+                     print('droite')
                      #print(cx)
                      angle_x = angle_x - 1
                      
@@ -530,8 +529,8 @@ def suiveur_de_boite_raspberry():
                         angle_x = droite_max_yeux
                      #print(angle)
                 
-                 if x < (largueur-precision)/2:
-                     #print('gauche')
+                 if cx < (largueur-precision)/2:
+                     print('gauche')
                      #print(cx)
                      angle_x = angle_x + 1
                     
@@ -539,7 +538,7 @@ def suiveur_de_boite_raspberry():
                         angle_x = gauche_max_yeux
                      #print(angle)
                 
-                 if y > (hauteur+precision)/2:
+                 if cy > (hauteur+precision)/2:
                      #print('droite')
                      #print(cx)
                      angle_y = angle_y - 1
@@ -548,7 +547,7 @@ def suiveur_de_boite_raspberry():
                         angle_y = hauteur_min_yeux
                      #print(angle)
                 
-                 if y < (hauteur-precision)/2:
+                 if cy < (hauteur-precision)/2:
                      #print('gauche')
                      #print(cx)
                      angle_y = angle_y + 1

@@ -83,7 +83,7 @@ while True:
         cv2.rectangle(resized, (x, y), (x + w, y + h),(0,255,0), 2)
         
         #Determination de la direction dans laquelle faire tourner les servos pour suivre le visage
-        if cx > (largueur+precision)/2:
+        if x > (largueur+precision)/2:
                  #print('droite')
                  #print(cx)
                  angle_x = angle_x - 1
@@ -92,7 +92,7 @@ while True:
                     angle_x = droite_max_yeux
                  #print(angle)
             
-        if cx < (largueur-precision)/2:
+        if x < (largueur-precision)/2:
                  #print('gauche')
                  #print(cx)
                  angle_x = angle_x + 1
@@ -101,7 +101,7 @@ while True:
                     angle_x = gauche_max_yeux
                  #print(angle)
             
-        if cy > (hauteur+precision)/2:
+        if y > (hauteur+precision)/2:
                  #print('droite')
                  #print(cx)
                  angle_y = angle_y - 1
@@ -110,7 +110,7 @@ while True:
                     angle_y = hauteur_min_yeux
                  #print(angle)
             
-        if cy < (hauteur-precision)/2:
+        if y < (hauteur-precision)/2:
                  #print('gauche')
                  #print(cx)
                  angle_y = angle_y + 1
