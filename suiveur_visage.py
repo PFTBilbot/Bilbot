@@ -3,6 +3,19 @@ import os
 import RPi.GPIO as GPIO
 import time
 
+#Valeurs d'angles limites des servos
+hauteur_max_yeux = 90
+hauteur_min_yeux = 70
+hauteur_moyennes_yeux = 80
+
+gauche_max_yeux = 80
+droite_max_yeux = 25
+centre_x_yeux = 55
+
+
+angle_x = centre_x_yeux
+angle_y = hauteur_moyennes_yeux
+
 #Dimensions de la fenetre
 largueur = 640
 hauteur = 480
@@ -41,10 +54,6 @@ GPIO.setup(led_broche, GPIO.OUT)
 servo_x_oeil = GPIO.PWM(broche_servo_x_oeil, frequence)
 servo_y_oeil = GPIO.PWM(broche_servo_y_oeil, frequence)
 
-#intialisation : regard au centre
-angle_x = 55
-angle_y = 80
-
 #Allumage de la led dans l'oeil
 GPIO.output(led_broche, GPIO.HIGH)
 
@@ -74,40 +83,40 @@ while True:
         cv2.rectangle(resized, (x, y), (x + w, y + h),(0,255,0), 2)
         
         #Determination de la direction dans laquelle faire tourner les servos pour suivre le visage
-        if x > (largueur+precision)/2:
+        if cx > (largueur+precision)/2:
                  #print('droite')
                  #print(cx)
                  angle_x = angle_x - 1
                  
-                 if angle_x < 25:
-                    angle_x = 25
+                 if angle_x < droite_max_yeux:
+                    angle_x = droite_max_yeux
                  #print(angle)
             
-        if x < (largueur-precision)/2:
+        if cx < (largueur-precision)/2:
                  #print('gauche')
                  #print(cx)
                  angle_x = angle_x + 1
                 
-                 if angle_x > 80:
-                    angle_x = 80
+                 if angle_x > gauche_max_yeux:
+                    angle_x = gauche_max_yeux
                  #print(angle)
             
-        if y > (hauteur+precision)/2:
+        if cy > (hauteur+precision)/2:
                  #print('droite')
                  #print(cx)
                  angle_y = angle_y - 1
                  
-                 if angle_y < 70:
-                    angle_y = 70
+                 if angle_y < hauteur_min_yeux:
+                    angle_y = hauteur_min_yeux
                  #print(angle)
             
-        if y < (hauteur-precision)/2:
+        if cy < (hauteur-precision)/2:
                  #print('gauche')
                  #print(cx)
                  angle_y = angle_y + 1
                 
-                 if angle_y > 90:
-                    angle_y = 90
+                 if angle_y > hauteur_max_yeux:
+                    angle_y = hauteur_max_yeux
                  #print(angle)
         
         #Deplacement des yeux

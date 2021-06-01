@@ -521,40 +521,40 @@ def suiveur_de_boite_raspberry():
                  cv2.circle(resized,(cx,cy),7,(255,255,255),-1)
                  
                  #Determination de la direction dans laquelle faire tourner les servos pour suivre le contours
-                 if cx > (largueur+precision)/2:
+                 if x > (largueur+precision)/2:
                      #print('droite')
                      #print(cx)
                      angle_x = angle_x - 1
                      
-                     if angle_x < 25:
-                        angle_x = 25
+                     if angle_x < droite_max_yeux:
+                        angle_x = droite_max_yeux
                      #print(angle)
                 
-                 if cx < (largueur-precision)/2:
+                 if x < (largueur-precision)/2:
                      #print('gauche')
                      #print(cx)
                      angle_x = angle_x + 1
                     
-                     if angle_x > 80:
-                        angle_x = 80
+                     if angle_x > gauche_max_yeux:
+                        angle_x = gauche_max_yeux
                      #print(angle)
                 
-                 if cy > (hauteur+precision)/2:
+                 if y > (hauteur+precision)/2:
                      #print('droite')
                      #print(cx)
                      angle_y = angle_y - 1
                      
-                     if angle_y < 70:
-                        angle_y = 70
+                     if angle_y < hauteur_min_yeux:
+                        angle_y = hauteur_min_yeux
                      #print(angle)
                 
-                 if cy < (hauteur-precision)/2:
+                 if y < (hauteur-precision)/2:
                      #print('gauche')
                      #print(cx)
                      angle_y = angle_y + 1
                     
-                     if angle_y > 90:
-                        angle_y = 90
+                     if angle_y > hauteur_max_yeux:
+                        angle_y = hauteur_max_yeux
                      #print(angle)
                  
                  #Deplacement des yeux

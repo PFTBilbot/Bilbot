@@ -7,6 +7,10 @@ import time
 ouverte = 20
 ferme = 60
 
+#valeurs moyennes des yeux en X et en Y
+angle_x = 55
+angle_y = 80
+
 vitesse = '150'
 volume = '300'
 langue = 'fr'
@@ -46,8 +50,6 @@ time.sleep(0.5)
 pwm.ChangeDutyCycle(0)
 
 #intialisation : regard au centre
-angle_x = 55
-angle_y = 80
 servo_x_oeil.start(angle_to_percent(angle_x))
 servo_y_oeil.start(angle_to_percent(angle_y))
 time.sleep(1)

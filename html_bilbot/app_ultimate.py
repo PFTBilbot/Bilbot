@@ -557,8 +557,8 @@ def gen_color():
                      #print(cx)
                      angle_x = angle_x - 1
                      
-                     if angle_x < 25:
-                        angle_x = 25
+                     if angle_x < droite_max_yeux:
+                        angle_x = droite_max_yeux
                      #print(angle)
                 
                  if cx < (largueur-precision)/2:
@@ -566,8 +566,8 @@ def gen_color():
                      #print(cx)
                      angle_x = angle_x + 1
                     
-                     if angle_x > 80:
-                        angle_x = 80
+                     if angle_x > gauche_max_yeux:
+                        angle_x = gauche_max_yeux
                      #print(angle)
                 
                  if cy > (hauteur+precision)/2:
@@ -575,8 +575,8 @@ def gen_color():
                      #print(cx)
                      angle_y = angle_y - 1
                      
-                     if angle_y < 70:
-                        angle_y = 70
+                     if angle_y < hauteur_min_yeux:
+                        angle_y = hauteur_min_yeux
                      #print(angle)
                 
                  if cy < (hauteur-precision)/2:
@@ -584,8 +584,8 @@ def gen_color():
                      #print(cx)
                      angle_y = angle_y + 1
                     
-                     if angle_y > 90:
-                        angle_y = 90
+                     if angle_y > hauteur_max_yeux:
+                        angle_y = hauteur_max_yeux
                      #print(angle)
                  
                  #Deplacement des yeux
