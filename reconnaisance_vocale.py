@@ -1,5 +1,4 @@
 import speech_recognition as sr  
-from espeak import espeak
 import RPi.GPIO as GPIO
 import time
 import os
