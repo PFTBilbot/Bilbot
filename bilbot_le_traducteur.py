@@ -1,5 +1,4 @@
 # coding=utf-8
-from espeak import espeak
 from googletrans import Translator
 import RPi.GPIO as GPIO
 import time
